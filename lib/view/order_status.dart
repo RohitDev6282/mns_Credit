@@ -127,7 +127,6 @@ class _OrderStatusState extends State<OrderStatus> {
                                 "receiptnumber":
                                     mnsrController.text.toUpperCase(),
                               };
-
                               getPendingList(Uri.encodeFull(jsonEncode(slug)));
                             }
                           },
@@ -273,10 +272,11 @@ class _OrderStatusState extends State<OrderStatus> {
 
     final response = await http.get(Uri.parse(url), headers: headers);
 
-    if (response.statusCode == 180) {
+    if (response.statusCode == 200) {
       var fetchdata = jsonDecode(response.body);
       if (fetchdata["length"] != 0) {
         var orderListData = fetchdata["data"];
+
         setState(() {
           sfdataGridView = true;
           getSearchData = searchApiModelFromJson(orderListData);
@@ -286,7 +286,7 @@ class _OrderStatusState extends State<OrderStatus> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: Text("No Result Found"),
+                title: const Text("No Result Found"),
                 actions: <Widget>[
                   ElevatedButton(
                     child: const Text("OK"),
@@ -298,8 +298,6 @@ class _OrderStatusState extends State<OrderStatus> {
               );
             });
       }
-    } else if (response.statusCode == 400) {
-      final searchApiModel = jsonDecode(response.body);
     }
   }
 }

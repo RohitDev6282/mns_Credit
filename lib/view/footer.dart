@@ -173,7 +173,7 @@ class _FooterPageState extends State<FooterPage> {
                         child: Row(
                           children: <Widget>[
                             const SizedBox(width: 20),
-                            Text("Marketing Order",
+                            Text("Marketing List",
                                 style: TextStyle(
                                     color: selectedItem == pos
                                         ? kSecondaryColor

@@ -10,7 +10,6 @@ import 'package:mns_management/view/lead_page.dart';
 import 'package:mns_management/view/order_status.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../utility/string.dart';
 
 // ignore: must_be_immutable
 class FooterPage extends StatefulWidget {
@@ -158,30 +157,113 @@ class _FooterPageState extends State<FooterPage> {
                       ),
                     ),
                     const SizedBox(height: 30),
-                    getDrawerItem(drawer1, 1, (() {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FooterPage(currentTab: 0)));
-                    })),
-                    getDrawerItem(drawer2, 2, (() {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FooterPage(currentTab: 1)));
-                    })),
-                    getDrawerItem(drawer3, 3, (() {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FooterPage(currentTab: 2)));
-                    })),
-                    getDrawerItem(drawer4, 4, (() {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FooterPage(currentTab: 3)));
-                    })),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FooterPage(currentTab: 0)));
+                      },
+                      child: Container(
+                        color: selectedItem == pos
+                            ? kSelectedrawerColor
+                            : kWhiteColor,
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                        child: Row(
+                          children: <Widget>[
+                            const SizedBox(width: 20),
+                            Text("Marketing Order",
+                                style: TextStyle(
+                                    color: selectedItem == pos
+                                        ? kSecondaryColor
+                                        : kBlackColor,
+                                    fontSize: 18))
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FooterPage(currentTab: 1)));
+                      },
+                      child: Container(
+                        color: selectedItem == pos
+                            ? kSelectedrawerColor
+                            : kWhiteColor,
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                        child: Row(
+                          children: <Widget>[
+                            const SizedBox(width: 20),
+                            Text("Order Status",
+                                style: TextStyle(
+                                    color: selectedItem == pos
+                                        ? kSecondaryColor
+                                        : kBlackColor,
+                                    fontSize: 18))
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FooterPage(currentTab: 2)));
+                      },
+                      child: Container(
+                        color: selectedItem == pos
+                            ? kSelectedrawerColor
+                            : kWhiteColor,
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                        child: Row(
+                          children: <Widget>[
+                            const SizedBox(width: 20),
+                            Text("Follow Up List",
+                                style: TextStyle(
+                                    color: selectedItem == pos
+                                        ? kSecondaryColor
+                                        : kBlackColor,
+                                    fontSize: 18))
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FooterPage(currentTab: 3)));
+                      },
+                      child: Container(
+                        color: selectedItem == pos
+                            ? kSelectedrawerColor
+                            : kWhiteColor,
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                        child: Row(
+                          children: <Widget>[
+                            const SizedBox(width: 20),
+                            Text("Lead Up List",
+                                style: TextStyle(
+                                    color: selectedItem == pos
+                                        ? kSecondaryColor
+                                        : kBlackColor,
+                                    fontSize: 18))
+                          ],
+                        ),
+                      ),
+                    ),
                     InkWell(
                       onTap: () async {
                         SharedPreferences preferences =

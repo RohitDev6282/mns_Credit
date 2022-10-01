@@ -1,0 +1,14 @@
+const drawer1 = "Marketing Order";
+const drawer2 = "Order Status";
+const drawer3 = "Follow Up List";
+const drawer4 = "Lead Up List";
+const drawer5 = "SignOut";
+const drawer6 = "Share and Invite";
+const drawer7 = "Help and FeedBack";
+const spokePersnF1 = "Ackno";
+const spokePersnF2 = "Report";
+const spokePersnF3 = "Name";
+const spokePersnF4 = "Email";
+const spokePersnF5 = "Mobile";
+const selectfield = "Please select the particular field";
+const nodatafound = "No data found";

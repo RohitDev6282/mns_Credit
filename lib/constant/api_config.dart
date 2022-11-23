@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Config {
   static String? prop;
 
-  static const String baseurl = "http://codeapi.mnscredit.in/api";
+  static const String baseurl = "https://codeapi.mnscredit.in/api";
 
   static const String billingCustomer =
       "$baseurl/Billing_customer?slug={%22status%22:1}&relation=[%22Mobile_number%22]";
@@ -36,6 +36,7 @@ class Config {
   static const String followAdd = "$baseurl/follow";
   static const String companySearch = "$baseurl/searchcompany/";
   static const String companyData = "$baseurl/company/";
+  static const String spokeaddRequest = "$baseurl/Branch_spocs";
 }
 
 // this.form.submit('get', `${this.$domain_name}/api/searchcompany/${value}/company_name`).then((success) => {

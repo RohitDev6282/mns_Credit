@@ -59,7 +59,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     var headers = {'mykey': myKey};
     var response =
         await http.get(Uri.parse(Config.customerList), headers: headers);
-
+    print(response.body.toString());
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
 

@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> with CodeAutoFill {
     };
 
     var response = await http.post(Uri.parse(Config.loginUrl), body: data);
-
+    print(response.body.toString());
     if (response.statusCode == 200) {
       var loginResponse = json.decode(response.body);
       if (loginResponse["data"]) {

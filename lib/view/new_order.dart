@@ -80,6 +80,7 @@ class _NewOrderState extends State<NewOrder> {
   bool visbility2 = false;
   bool readable = false;
   bool waiting = true;
+  bool isSpokeAdd = true;
 
   String discountType = "0";
   String finalId = "";
@@ -173,6 +174,9 @@ class _NewOrderState extends State<NewOrder> {
   final TextEditingController _comment = TextEditingController();
   final TextEditingController _partyName = TextEditingController();
   final TextEditingController controller = TextEditingController();
+  final TextEditingController spokepersonName = TextEditingController();
+  final TextEditingController spokeEmail = TextEditingController();
+  final TextEditingController spokeMobile = TextEditingController();
 
   Future getAgent() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -348,6 +352,7 @@ class _NewOrderState extends State<NewOrder> {
     var headers = {'mykey': myKey};
     var response =
         await http.get(Uri.parse(Config.customerList), headers: headers);
+    print(response);
     if (response.statusCode == 200) {
       setState(() {
         isLoading = true;
@@ -745,201 +750,288 @@ class _NewOrderState extends State<NewOrder> {
                   height: height,
                 ),
                 readable == true
-                    ? SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 50,
-                              child: Column(children: [
-                                const SizedBox(
-                                  child: Text(
-                                    spokePersnF1,
-                                    style: kBLTextStyle,
-                                  ),
+                    ? Column(
+                        children: [
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: 50,
+                                  child: Column(children: [
+                                    const SizedBox(
+                                      child: Text(
+                                        spokePersnF1,
+                                        style: kBLTextStyle,
+                                      ),
+                                    ),
+                                    ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: fetchspokPrsn.length,
+                                        itemBuilder: (context, index) {
+                                          spokePersonDetail.add({
+                                            "spoc_id": fetchspokPrsn[index]
+                                                ["id"],
+                                            "ack": 0,
+                                            "report": 0,
+                                            "spoc_name": fetchspokPrsn[index]
+                                                ["spoc_name"],
+                                            "spoc_mobile": fetchspokPrsn[index]
+                                                ["spoc_phone"],
+                                            "spoc_email": fetchspokPrsn[index]
+                                                ["spoc_email"],
+                                          });
+                                          return Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      5, 5, 5, 5),
+                                              child: FittedBox(
+                                                  child: SizedBox(
+                                                height: 21.9,
+                                                child: Checkbox(
+                                                  value: selectedIndexes
+                                                      .contains(index),
+                                                  onChanged: (bool? value) {
+                                                    setState(() {
+                                                      ackno = value!;
+                                                    });
+
+                                                    if (selectedIndexes
+                                                        .contains(index)) {
+                                                      selectedIndexes
+                                                          .remove(index);
+
+                                                      setState(() {
+                                                        spokeID = index;
+                                                        spokePersonDetail[index]
+                                                            ["ack"] = 0;
+                                                      });
+                                                    } else {
+                                                      selectedIndexes
+                                                          .add(index);
+                                                      setState(() {
+                                                        spokeID = index;
+                                                        spokePersonDetail[index]
+                                                            ["ack"] = 1;
+                                                      });
+                                                    }
+                                                  },
+                                                  checkColor: kWhiteColor,
+                                                  activeColor: kSecondaryColor,
+                                                ),
+                                              )));
+                                        })
+                                  ]),
                                 ),
-                                ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: fetchspokPrsn.length,
-                                    itemBuilder: (context, index) {
-                                      spokePersonDetail.add({
-                                        "spoc_id": fetchspokPrsn[index]["id"],
-                                        "ack": 0,
-                                        "report": 0,
-                                        "spoc_name": fetchspokPrsn[index]
-                                            ["spoc_name"],
-                                        "spoc_mobile": fetchspokPrsn[index]
-                                            ["spoc_phone"],
-                                        "spoc_email": fetchspokPrsn[index]
-                                            ["spoc_email"],
-                                      });
+                                const SizedBox(
+                                  width: height,
+                                ),
+                                SizedBox(
+                                  width: 50,
+                                  child: Column(children: [
+                                    const SizedBox(
+                                      child: Text(
+                                        spokePersnF2,
+                                        style: kBLTextStyle,
+                                      ),
+                                    ),
+                                    Column(
+                                        children: List.generate(
+                                            fetchspokPrsn.length, (index) {
                                       return Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              5, 5, 5, 5),
-                                          child: FittedBox(
-                                              child: SizedBox(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            5, 5, 5, 5),
+                                        child: FittedBox(
+                                          child: SizedBox(
                                             height: 21.9,
                                             child: Checkbox(
-                                              value: selectedIndexes
+                                              value: selectedReportIndexes
                                                   .contains(index),
                                               onChanged: (bool? value) {
-                                                setState(() {
-                                                  ackno = value!;
-                                                });
-
-                                                if (selectedIndexes
+                                                if (selectedReportIndexes
                                                     .contains(index)) {
-                                                  selectedIndexes.remove(index);
+                                                  selectedReportIndexes
+                                                      .remove(index);
+                                                  // unselect
 
                                                   setState(() {
                                                     spokeID = index;
                                                     spokePersonDetail[index]
-                                                        ["ack"] = 0;
+                                                        ["report"] = 0;
                                                   });
                                                 } else {
-                                                  selectedIndexes.add(index);
+                                                  selectedReportIndexes
+                                                      .add(index);
                                                   setState(() {
                                                     spokeID = index;
                                                     spokePersonDetail[index]
-                                                        ["ack"] = 1;
-                                                  });
+                                                        ["report"] = 1;
+                                                  }); // select
                                                 }
                                               },
                                               checkColor: kWhiteColor,
                                               activeColor: kSecondaryColor,
                                             ),
-                                          )));
-                                    })
-                              ]),
-                            ),
-                            const SizedBox(
-                              width: height,
-                            ),
-                            SizedBox(
-                              width: 50,
-                              child: Column(children: [
-                                const SizedBox(
-                                  child: Text(
-                                    spokePersnF2,
-                                    style: kBLTextStyle,
-                                  ),
-                                ),
-                                Column(
-                                    children: List.generate(
-                                        fetchspokPrsn.length, (index) {
-                                  return Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                                    child: FittedBox(
-                                      child: SizedBox(
-                                        height: 21.9,
-                                        child: Checkbox(
-                                          value: selectedReportIndexes
-                                              .contains(index),
-                                          onChanged: (bool? value) {
-                                            if (selectedReportIndexes
-                                                .contains(index)) {
-                                              selectedReportIndexes
-                                                  .remove(index);
-                                              // unselect
-
-                                              setState(() {
-                                                spokeID = index;
-                                                spokePersonDetail[index]
-                                                    ["report"] = 0;
-                                              });
-                                            } else {
-                                              selectedReportIndexes.add(index);
-                                              setState(() {
-                                                spokeID = index;
-                                                spokePersonDetail[index]
-                                                    ["report"] = 1;
-                                              }); // select
-
-                                            }
-                                          },
-                                          checkColor: kWhiteColor,
-                                          activeColor: kSecondaryColor,
+                                          ),
                                         ),
+                                      );
+                                    }))
+                                  ]),
+                                ),
+                                const SizedBox(
+                                  width: height,
+                                ),
+                                SizedBox(
+                                  width: 200,
+                                  child: Column(children: [
+                                    const SizedBox(
+                                      child: Text(
+                                        spokePersnF3,
+                                        style: kBLTextStyle,
                                       ),
                                     ),
-                                  );
-                                }))
-                              ]),
-                            ),
-                            const SizedBox(
-                              width: height,
-                            ),
-                            SizedBox(
-                              width: 200,
-                              child: Column(children: [
+                                    Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: fetchspokPrsn
+                                            .map((i) => Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          5, 4, 5, 4.3),
+                                                  child: SizedBox(
+                                                      height: 20,
+                                                      child:
+                                                          Text(i["spoc_name"])),
+                                                ))
+                                            .toList())
+                                  ]),
+                                ),
                                 const SizedBox(
-                                  child: Text(
-                                    spokePersnF3,
-                                    style: kBLTextStyle,
+                                  width: height,
+                                ),
+                                Column(children: [
+                                  const SizedBox(
+                                    child: Text(
+                                      spokePersnF4,
+                                      style: kBLTextStyle,
+                                    ),
                                   ),
+                                  Column(
+                                      children: fetchspokPrsn
+                                          .map((i) => Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        5, 4, 5, 4.3),
+                                                child: SizedBox(
+                                                    height: 20,
+                                                    child:
+                                                        Text(i["spoc_email"])),
+                                              ))
+                                          .toList())
+                                ]),
+                                const SizedBox(
+                                  width: height,
                                 ),
-                                Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: fetchspokPrsn
-                                        .map((i) => Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      5, 4, 5, 4.3),
-                                              child: SizedBox(
+                                Column(children: [
+                                  const SizedBox(
+                                    child: Text(
+                                      spokePersnF5,
+                                      style: kBLTextStyle,
+                                    ),
+                                  ),
+                                  Column(
+                                      children: fetchspokPrsn
+                                          .map((i) => Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        5, 4, 5, 4.3),
+                                                child: SizedBox(
                                                   height: 20,
-                                                  child: Text(i["spoc_name"])),
-                                            ))
-                                        .toList())
-                              ]),
+                                                  child: Text(i["spoc_phone"]
+                                                      .toString()),
+                                                ),
+                                              ))
+                                          .toList())
+                                ]),
+                              ],
                             ),
-                            const SizedBox(
-                              width: height,
-                            ),
-                            Column(children: [
-                              const SizedBox(
-                                child: Text(
-                                  spokePersnF4,
-                                  style: kBLTextStyle,
-                                ),
+                          ),
+                          Row(
+                            children: [
+                              CustomButton(
+                                text: "Add Spoke",
+                                colors: kSecondaryColor,
+                                onTap: () {
+                                  // isSpokeAdd = true;
+
+                                  print(isSpokeAdd);
+                                },
                               ),
-                              Column(
-                                  children: fetchspokPrsn
-                                      .map((i) => Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                5, 4, 5, 4.3),
-                                            child: SizedBox(
-                                                height: 20,
-                                                child: Text(i["spoc_email"])),
-                                          ))
-                                      .toList())
-                            ]),
-                            const SizedBox(
-                              width: height,
+                            ],
+                          ),
+                          // isSpokeAdd==true
+                          //     ?
+                          SizedBox(
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 8),
+                                TextFieldWidget(
+                                    keyType: TextInputType.streetAddress,
+                                    validiate: (value) => value == null
+                                        ? 'Please fill the Name'
+                                        : null,
+                                    hinttest: "",
+                                    label: Row(
+                                      children: const [
+                                        Text(
+                                          'Name',
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(3.0),
+                                        ),
+                                        Text('*',
+                                            style:
+                                                TextStyle(color: Colors.red)),
+                                      ],
+                                    ),
+                                    controller: spokepersonName),
+                                const SizedBox(height: 8),
+                                TextFieldWidget(
+                                    keyType: TextInputType.streetAddress,
+                                    validiate: (value) => value == null
+                                        ? 'Please fill the Email'
+                                        : null,
+                                    hinttest: "",
+                                    label: Row(
+                                      children: const [
+                                        Text(
+                                          'Email',
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(3.0),
+                                        ),
+                                        Text('*',
+                                            style:
+                                                TextStyle(color: Colors.red)),
+                                      ],
+                                    ),
+                                    controller: spokeEmail),
+                                const SizedBox(height: 8),
+                                CustomButton(
+                                  text: "SPOC Add",
+                                  colors: kSecondaryColor,
+                                  onTap: () {
+                                    // isSpokeAdd = false;
+                                    // print(isSpokeAdd);
+                                    addApokePerson(
+                                        spokepersonName.text, spokeEmail.text);
+                                  },
+                                )
+                              ],
                             ),
-                            Column(children: [
-                              const SizedBox(
-                                child: Text(
-                                  spokePersnF5,
-                                  style: kBLTextStyle,
-                                ),
-                              ),
-                              Column(
-                                  children: fetchspokPrsn
-                                      .map((i) => Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                5, 4, 5, 4.3),
-                                            child: SizedBox(
-                                              height: 20,
-                                              child: Text(
-                                                  i["spoc_phone"].toString()),
-                                            ),
-                                          ))
-                                      .toList())
-                            ]),
-                          ],
-                        ),
+                          )
+                          // : Container()
+                        ],
                       )
                     : Container(),
                 const SizedBox(
@@ -1850,6 +1942,73 @@ class _NewOrderState extends State<NewOrder> {
         ),
       ),
     );
+  }
+
+  Future addApokePerson(String name, String email) async {
+    Map body = {
+      "branch_id": selectBranch,
+      "spoc_name": name,
+      "spoc_email": email,
+      "overseas_access": "0",
+      "database_report_access": "0",
+      "preliminary_report_access": "0",
+      "request_detail_report_access": "0",
+      "spoc_deafult": "0"
+    };
+    print(body);
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var loginData = preferences.getString("token") ?? "";
+    Map<String, dynamic> decodeSvData = json.decode(loginData);
+
+    String accessKey = '${decodeSvData["id"]}';
+    var headers = {
+      'accesskey2': accessKey,
+      'mykey': loginData,
+    };
+    var request = await http.post(Uri.parse(Config.spokeaddRequest),
+        body: body, headers: headers);
+    print("the spoke datan response is $request");
+    var updateResponse = json.decode(request.body);
+
+    if (request.statusCode == 200) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(updateResponse["data"].toString()),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: const Text("OK"),
+                  onPressed: () {
+                    getSpokePersonList();
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          });
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                updateResponse["notice"].toString(),
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
+              ),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: const Text("OK"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          });
+      return null;
+    }
   }
 
   Future newOrder(
